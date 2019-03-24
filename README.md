@@ -21,8 +21,6 @@ Obs: Generally any platform with C++ support will work too, like smart tvs and e
 ## Requirements:
 
 1. Check [ezored](https://github.com/ezored/ezored) project for general requirements.
-2. Add bincrafters conan server:  
-    > conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
 
 ## How to use:
 
