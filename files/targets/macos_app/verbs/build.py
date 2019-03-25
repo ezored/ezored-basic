@@ -7,6 +7,7 @@ from ezored.mod import file
 from ezored.mod import log
 from ezored.mod import runner
 from ezored.mod import target
+from ezored.mod import util
 
 
 # -----------------------------------------------------------------------------
@@ -17,6 +18,10 @@ def run(params):
 
     archs = target_config['archs']
     build_types = target_config['build_types']
+    param_dry_run = util.list_has_key(params['args'], '--dry-run')
+
+    if param_dry_run:
+        log.info("Running in dry mode...")
 
     if archs and len(archs) > 0:
         for arch in archs:
@@ -36,8 +41,14 @@ def run(params):
                     const.DIR_NAME_BUILD_TARGET,
                 )
 
-                file.remove_dir(build_dir)
-                file.create_dir(build_dir)
+                clean_build_dir = True
+
+                if param_dry_run and os.path.isdir(build_dir):
+                    clean_build_dir = False
+
+                if clean_build_dir:
+                    file.remove_dir(build_dir)
+                    file.create_dir(build_dir)
 
                 run_args = [
                     'conan',
@@ -85,11 +96,6 @@ def run(params):
                 )
 
                 # copy assets
-                build_bin_dir = os.path.join(
-                    build_dir,
-                    'bin'
-                )
-
                 assets_dir = os.path.join(
                     proj_path,
                     const.DIR_NAME_PROJECTS,
@@ -98,9 +104,14 @@ def run(params):
                     'assets',
                 )
 
-                file.copy_all_inside(assets_dir, os.path.join(
-                    build_bin_dir, 'assets'
-                ))
+                build_assets_dir = os.path.join(
+                    build_dir,
+                    'bin',
+                    'assets',
+                )
+
+                file.remove_dir(build_assets_dir)
+                file.copy_all_inside(assets_dir, build_assets_dir)
     else:
         log.error('Arch list for "{0}" is invalid or empty'.format(
             target_name
