@@ -1,4 +1,4 @@
-"""Install and build conan dependencies"""
+"""Build executable"""
 
 import os
 
