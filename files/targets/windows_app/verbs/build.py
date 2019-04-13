@@ -1,4 +1,4 @@
-"""Build executable"""
+"""Install and build conan dependencies"""
 
 import os
 
@@ -6,15 +6,15 @@ import ezored.app.const as const
 from ezored.modules import file
 from ezored.modules import log
 from ezored.modules import runner
-from ezored.modules import target
 from ezored.modules import util
+from files.config import target_windows_app as config
 
 
 # -----------------------------------------------------------------------------
 def run(params):
     proj_path = params['proj_path']
     target_name = params['target_name']
-    target_config = target.get_target_config(proj_path, target_name)
+    target_config = config.run(proj_path, target_name, params)
 
     archs = target_config['archs']
     build_types = target_config['build_types']
@@ -115,22 +115,23 @@ def run(params):
                     file.copy_all_inside(deps_bin_dir, build_bin_dir)
 
                 # copy assets
-                assets_dir = os.path.join(
-                    proj_path,
-                    const.DIR_NAME_PROJECTS,
-                    'samples',
-                    'basic',
-                    'assets',
-                )
+                if 'assets_dir' in target_config:
+                    assets_dir = target_config['assets_dir']
 
-                build_assets_dir = os.path.join(
-                    build_dir,
-                    'bin',
-                    'assets',
-                )
+                    assets_dir = os.path.join(
+                        proj_path,
+                        assets_dir,
+                    )
 
-                file.remove_dir(build_assets_dir)
-                file.copy_all_inside(assets_dir, build_assets_dir)
+                    if os.path.isdir(assets_dir):
+                        build_assets_dir = os.path.join(
+                            build_dir,
+                            'bin',
+                            os.path.basename(assets_dir)
+                        )
+
+                        file.remove_dir(build_assets_dir)
+                        file.copy_dir(assets_dir, build_assets_dir)
     else:
         log.error('Arch list for "{0}" is invalid or empty'.format(
             target_name

@@ -18,13 +18,32 @@ add_subdirectory(
 # Project
 project(${PROJECT_CONFIG_NAME})
 
+# Source files
+file(GLOB S_FILES_PROJECT "${PROJECT_ROOT_PATH}/projects/samples/simple/*.cpp")
+
+file(GLOB H_FILES_LOGGER_LIB_IMPL "${PROJECT_ROOT_PATH}/files/src/logger/cpp/ezored/util/Simple*.hpp")
+file(GLOB S_FILES_LOGGER_LIB_IMPL "${PROJECT_ROOT_PATH}/files/src/logger/cpp/ezored/util/Simple*.cpp")
+
+file(GLOB H_FILES_HTTP_CLIENT_LIB_IMPL "${PROJECT_ROOT_PATH}/files/src/http-client/cpp/ezored/net/http/Simple*.hpp")
+file(GLOB S_FILES_HTTP_CLIENT_LIB_IMPL "${PROJECT_ROOT_PATH}/files/src/http-client/cpp/ezored/net/http/Simple*.cpp")
+
+file(GLOB H_FILES_SHARED_DATA_LIB_IMPL "${PROJECT_ROOT_PATH}/files/src/shared-data/cpp/ezored/data/Simple*.hpp")
+file(GLOB S_FILES_SHARED_DATA_LIB_IMPL "${PROJECT_ROOT_PATH}/files/src/shared-data/cpp/ezored/data/Simple*.cpp")
+
 # Merge lists
 set(
-    TARGET_HEADER_FILES
+    TARGET_HEADER_FILES     
+    ${H_FILES_LOGGER_LIB_IMPL}
+    ${H_FILES_HTTP_CLIENT_LIB_IMPL}
+    ${H_FILES_SHARED_DATA_LIB_IMPL}
 )
 
 set(
-    TARGET_SOURCE_FILES
+    TARGET_SOURCE_FILES     
+    ${S_FILES_LOGGER_LIB_IMPL}
+    ${S_FILES_HTTP_CLIENT_LIB_IMPL}
+    ${S_FILES_SHARED_DATA_LIB_IMPL}
+    ${S_FILES_PROJECT}    
 )
 
 set(
@@ -38,6 +57,10 @@ set(
 # Conan
 include(${PROJECT_BUILD_DIR}/conan/conanbuildinfo.cmake)
 conan_basic_setup()
+
+# Flags
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${PROJECT_CMAKE_C_FLAGS}" CACHE INTERNAL "")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${PROJECT_CMAKE_CXX_FLAGS}" CACHE INTERNAL "")
 
 # Project
 include_directories(${PROJECT_HEADER_SEARCH_PATHS})

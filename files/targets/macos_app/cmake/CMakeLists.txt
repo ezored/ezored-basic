@@ -10,9 +10,8 @@ set(PROJECT_ROOT_PATH ${CMAKE_SOURCE_REALPATH})
 set(PROJECT_BUILD_DIR ${PROJECT_ROOT_PATH}/build/${PROJECT_TARGET_NAME}/${CMAKE_BUILD_TYPE}/${PROJECT_CONFIG_ARCH} CACHE INTERNAL "")
 
 # Platform configurations
-set(CMAKE_OSX_DEPLOYMENT_TARGET "10.9" CACHE STRING "Minimum macOS deployment version")
-set(DEVELOPMENT_TEAM_ID "" CACHE STRING "Development team ID")
-set(CODE_SIGN_IDENTITY "Mac Developer" CACHE STRING "Sign identity")
+set(DEVELOPMENT_TEAM_ID "" CACHE STRING "Development Team ID")
+set(CODE_SIGN_IDENTITY "Mac Developer" CACHE STRING "Sign Identity")
 
 # Include: common
 add_subdirectory(
@@ -29,7 +28,7 @@ set(
 )
 
 set(
-    TARGET_SOURCE_FILES     
+    TARGET_SOURCE_FILES
 )
 
 set(
@@ -51,8 +50,12 @@ set(PROJECT_FRAMEWORK_LINKS
 include(${PROJECT_BUILD_DIR}/conan/conanbuildinfo.cmake)
 conan_basic_setup()
 
-# CXXFlags
+# CXX flags
 set(PROJECT_CMAKE_CXX_FLAGS "${PROJECT_CMAKE_CXX_FLAGS} -stdlib=libc++" CACHE INTERNAL "")
+
+# Flags
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${PROJECT_CMAKE_C_FLAGS}" CACHE INTERNAL "")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${PROJECT_CMAKE_CXX_FLAGS}" CACHE INTERNAL "")
 
 # Project
 include_directories(${PROJECT_HEADER_SEARCH_PATHS})
