@@ -23,11 +23,13 @@ jobs:
       - python make.py target linux_app package
   - os: osx
     osx_image: xcode11.2
+    language: generic
+    before_install:
+      - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then mkdir $HOME/bin; ln -s $(which pip3) $HOME/bin/pip; fi
     install:
-      - pip3 install conan
+      - pip install conan
     before_script:
       - conan profile new default --detect
-      - conan profile update settings.compiler.libcxx=libstdc++11 default
       - conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
       - python make.py conan install_profiles
     script:
