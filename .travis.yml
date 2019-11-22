@@ -21,6 +21,7 @@ jobs:
       - python make.py target linux_app conan
       - python make.py target linux_app build
       - python make.py target linux_app package
+      - ls -lah dist/linux_app/Release/
       - cd dist/linux_app/Release/x86/ && ./Sample
       - cd dist/linux_app/Release/x86_64/ && ./Sample
   - os: osx
