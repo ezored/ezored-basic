@@ -31,6 +31,7 @@ jobs:
     before_script:
       - conan profile new default --detect
       - conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
+      - conan remote add darwin-toolchain https://api.bintray.com/conan/ezored/conan-darwin-toolchain
       - python make.py conan install_profiles
     script:
       - python make.py target macos_app conan
