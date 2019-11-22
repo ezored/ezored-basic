@@ -21,6 +21,8 @@ jobs:
       - python make.py target linux_app conan
       - python make.py target linux_app build
       - python make.py target linux_app package
+      - cd dist/linux_app/Release/x86/ && ./Sample
+      - cd dist/linux_app/Release/x86_64/ && ./Sample
   - os: osx
     osx_image: xcode11.2
     language: generic
@@ -37,3 +39,4 @@ jobs:
       - python make.py target macos_app conan
       - python make.py target macos_app build
       - python make.py target macos_app package
+      - cd dist/macos_app/Release/x86_64/ && ./Sample
